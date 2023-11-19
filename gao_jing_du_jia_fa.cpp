@@ -24,25 +24,32 @@ int main()
     {
         A=B;
     }
-    for (int i = 0; i < A; i++)
+    for (int i = 0; i < strlen(a); i++)
     {
         aa[i]=a[strlen(a)-i-1]-'0';
+
+    }
+    for(int i=0;i<strlen(b);i++)
+    {
         bb[i]=b[strlen(b)-i-1]-'0';
     }
-    //cout<<"";
-    for (int i = A; i >= 0; i--)
+    for(int i=0;i<=A;i++)
     {
-        c[i]=aa[i]+bb[i];
+        c[i]=aa[i]+bb[i]+c[i];
         if(c[i]>=10)
         {
             c[i]=c[i]%10;
-            c[i-1]++;
+            c[i+1]++;
         }
     }
-    for (int i = A; i >0; i--)
+    if(c[A]>0)
     {
-        cout<<c[i-1]<<"";
+        A++;
     }
-    
+    for(int i=A;i>0;i--)
+    {
+        cout<<c[i-1];
+    }
+    cout<<endl;
 	return 0;
 }
