@@ -3,19 +3,18 @@ using namespace std;
 vector<bool> b;
 vector<int> c;
 int m=3;
-int64_t k(int64_t n)
-{
-    if(n==1) return n;
-    return  n*k(n-1);
-}
+int64_t l=0;
 void f(int n)
 {
+
     if(n==m+1){
         for (int i = 0; i < m; i++)
         {
-            cout<<c[i]<<"  ";
+            printf("%d",c[i]);
+            cout<<"  ";
         }
         cout<<endl;
+        l++;
         return;
     }
     else
@@ -37,10 +36,14 @@ void f(int n)
 }
 int main()
 {
-    cin>>m;
+    scanf("%d",&m);
     c.resize(m);
     b.resize(m);
+    clock_t start,end;
+    start = clock();
     f(1);
-    cout<<"Number of programs:"<<k(m);
+    end = clock();
+    cout<<"Number of programs:"<<l<<endl;
+    cout<<"time = "<<double(end-start)/CLOCKS_PER_SEC<<"s"<<endl;
     return 0;
 }
