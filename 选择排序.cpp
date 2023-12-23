@@ -1,10 +1,4 @@
-#include<iostream>
-#include<cmath>
-#include<string>
-#include<fstream>
-#include<cstdlib>
-#include<ctime>
-#include<iomanip>
+#include<bits/stdc++.h>
 using namespace std;
 int main()
 {
