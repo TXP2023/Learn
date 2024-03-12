@@ -1,83 +1,106 @@
+
 #include <bits/stdc++.h>
 #define ll long long
 
 using namespace std;
 
-struct NODE
+struct EDGE
 {
-    ll Y=-1,B=-1;
-}Node;
+    ll from,to,right;
+};
 
-bool cmp(NODE a, NODE b)
+ll N,M;
+vector<EDGE>::iterator obj;
+vector<EDGE> way;
+vector< bool > vbool;
+vector< ll > v;
+
+ll find(ll x)
 {
-    return a.B > b.B;
+    if(v[x] == x)
+    {
+        return x;
+    }
+    else
+    {
+        return v[x] = find(v[x]);
+    }
 }
 
-vector< NODE >::iterator obj;
-vector< vector< ll > > v;
-vector< bool > vbool;
-vector< NODE > Edge;
-ll N,M,ans=0,ASML=0;
-
-
-void DFS(ll n)
+bool cmp(EDGE x, EDGE y)
 {
-    if(ASML == N-1)
+    return x.right < y.right;
+}
+
+ll Prim()
+{
+    ll ans=0,ASML=0;
+    sort(way.begin(),way.end(),cmp);
+    vbool[way[0].from]=true;
+    while (ASML<N-1)
     {
-        printf("%lld\n",ans);
-        exit(EXIT_SUCCESS);
-        return;
-    }
-    for (ll i = 0; i < N; i++)//寻找当前被寻找点的最小路径
-    {
-        if(v[n][i]!= -1 && vbool[i]==false)//如果这个路径可以走且这个点没有被走过
+        for (ll i = 0; i < way.size(); i++)
         {
-            NODE BUG;//如果大于，加入未选择数组
-            BUG.Y=i;
-            BUG.B=v[n][i];
-            Edge.push_back(BUG);
+            if(ASML==N-1)
+            {
+                break;
+            }
+            else
+            {
+                if(v.size()==0)
+                {
+                    printf("orz\n");
+                    exit(EXIT_SUCCESS);
+                }
+            }
+            if((vbool[ way[i].to ] == false && vbool[ way[i].from ] == true))
+            {
+                vbool[ way[i].to ]=true;
+                v[way[i].to] = find(way[i].from);
+                obj = way.begin()+i;
+                ans += way[i].right;
+                way.erase(obj);
+                i--;
+                ASML++;
+            }
+            else
+            {
+                if((vbool[ way[i].to ] == true && vbool[ way[i].from ] == false))
+                {
+                    vbool[ way[i].from ]=true;
+                    v[way[i].from] = find(way[i].to);
+                    obj = way.begin()+i;
+                    ans += way[i].right;
+                    way.erase(obj);
+                    i--;
+                    ASML++;
+                }
+            }
         }
     }
-    stable_sort(Edge.begin(),Edge.end(),cmp);//排序
-    for (ll i = Edge.size()-1; i >= 0; i--)
-    {
-        if(vbool[Edge[i].Y]==true)
-        {
-            obj=Edge.begin()+i;
-            Edge.erase(obj); 
-        }
-    }
-    ll Y=Edge[Edge.size()-1].Y;
-    ans=ans+Edge[Edge.size()-1].B;
-    Edge.pop_back();
-    ASML++;
-    vbool[Y] = true;
-    DFS(Y);
-    return;
+    return ans;
+    
 }
 
 int main()
 {
     freopen("D:\\code\\C++\\SHU_RU.in", "r", stdin);
-    scanf("%lld%lld",&N,&M);
+    scanf("%lld%lld",&N,&M); //输入代表有N个节点M条路径
     v.resize(N);
     vbool.resize(N,false);
     for (ll i = 0; i < N; i++)
     {
-        v[i].resize(N,-1);
+        v[i] = i;
     }
     for (int i = 0; i < M; i++)
     {
-        ll A,B,Z;
-        //scanf("%lld%lld%lld",&A,&B,&Z);
-        cin>>A>>B>>Z;
-        A--;
-        B--;
-        v[A][B]=Z;
-        v[B][A]=Z;
+        EDGE e;
+        cin >> e.from >> e.to >> e.right;
+        e.from--;
+        e.to--;
+        way.push_back(e);
     }
-    Node.B=10000;
-    vbool[0] = true;
-    DFS(0);
+    //vbool[0]=true;
+    printf("%lld\n",Prim());
     return 0;
 }
