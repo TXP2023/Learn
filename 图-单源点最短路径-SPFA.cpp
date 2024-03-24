@@ -1,5 +1,5 @@
 //有权有向图
-#include <thread>
+
 #include <stdio.h>
 #include <vector>
 #include <math.h>
@@ -10,28 +10,19 @@ using namespace std;
 
 struct  anode
 {
-    ll k,right;//走到了节点k,累计权重为right
+    ll k,right;//走到了节点k,累计权重为right 987\57
     bool operator <(const anode &a)const{
 		return right<a.right;
 	}
 };
 
+priority_queue< anode > nodes;
 vector< vector< anode > > v;
 vector< ll > vis;
-priority_queue< anode > nodes;
 ll N,M,L;//N个点 M条无相边 K次询问 从点L开始
 
-void TODO( anode a,ll i)
-{
-    vis[v[a.k][i].k] = v[a.k][i].right+a.right;
-    anode NODE;
-    NODE.k = v[a.k][i].k;
-    NODE.right = v[a.k][i].right+a.right;
-    nodes.push(NODE);
-}
-
 inline void BFS(ll l)
-{
+{        
     anode Node;//建立一个类型为anode的结构体为队列的首位
     Node.k = l;
     Node.right = 0;
@@ -42,7 +33,7 @@ inline void BFS(ll l)
             nodes.pop();
 
         if(nodes.empty())
-            break;
+            return;
 
         anode node = nodes.top();
         nodes.pop();//弹出
@@ -55,18 +46,15 @@ inline void BFS(ll l)
                 NODE.k = v[node.k][i].k;
                 NODE.right = v[node.k][i].right+node.right;
                 nodes.push(NODE);
-                
-                //thread t(TODO, node,i);
-		        //t.detach();	
             }
         }
     }
     return;
 }
 
-signed main()
+int main()
 {
-    //freopen("D:\\code\\C++\\SHU_RU.in","r",stdin);
+    freopen("D:\\code\\C++\\SHU_RU.in","r",stdin);
     scanf("%ld%ld%ld",&N,&M,&L);
     v.resize(N);
     vis.resize(N,-1);
@@ -74,7 +62,7 @@ signed main()
     {
         ll from,to,right;
         scanf("%ld%ld%ld",&from,&to,&right);
-        if(--from != --to && right>=0)
+        if(--from != --to )
         {
             anode Anode;
             Anode.k = to;
@@ -82,11 +70,21 @@ signed main()
             v[from].push_back(Anode);
         }
     }
-    vis[--L] = 0;
+    L--;
+    vis[L] = 0;
     BFS(L);
     for (ll i = 0; i < N; i++)
     {
-        printf("%ld%c",vis[i],' ');
+        switch (vis[i])
+        {
+        case -1:
+            printf("%ld%c",-1,' ');
+            break;
+        
+        default:
+            printf("%ld%c",vis[i],' ');
+            break;
+        }
     }
     printf("\n");
     return 0;
